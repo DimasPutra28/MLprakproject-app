@@ -1,0 +1,25 @@
+import pandas as pd
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
+# Read the dataset
+data = pd.read_csv("piki_dataset.csv")
+
+# Calculate popularity score
+data['popularity_score'] = data['liked'] + data['spotify_popularity']
+print(data.head())
+
+# Sort the data by popularity score in descending order
+sorted_data = data.sort_values(by='popularity_score', ascending=False)
+
+# Get the recommended songs
+recommendations = sorted_data['song_id'].unique()[:10]
+
+print("Recommended songs:")
+for song_id in recommendations:
+    print(song_id)
